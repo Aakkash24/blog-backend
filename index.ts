@@ -30,6 +30,15 @@ app.use(cors())
 app.use(express.json())
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
+app.use((req,res,next)=>{
+    const acceptHeader = req.header('Accept');
+    if(acceptHeader && acceptHeader.includes('application/json')) {
+    // Set the response format to JSON
+    res.setHeader('Content-Type', 'application/json');
+  }
+  next();
+})
+
 const URL:any = process.env.URL
 const PORT:any = process.env.PORT
 

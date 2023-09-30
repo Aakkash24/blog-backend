@@ -7,7 +7,7 @@
     "test": "jest",
     "start": "nodemon index.ts",
     "test:blog": "jest --testPathPattern=blog.test.ts",
-    "typedoc":"typedoc --out docs ."
+    "typedoc": "typedoc --out docs ."
   },
   "keywords": [],
   "author": "",
