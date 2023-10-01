@@ -21,6 +21,7 @@ const jwt = require("jsonwebtoken");
  *                   type: string
  */
 const verify = (req:Request,res:any,next:NextFunction) => {
+    console.log("Inside verify");
     if(!req.headers.authorization) {
         return res.status(403).json({msg:"Not authorized"})
     }

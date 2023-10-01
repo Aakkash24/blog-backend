@@ -20,7 +20,6 @@ const BlogSchema = new mongoose.Schema({
     },
     bphoto:{
         type:String,
-        require:true
     },
     bviews:{
         type:Number,

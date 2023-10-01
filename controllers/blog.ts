@@ -1,13 +1,13 @@
 import Blog from "../models/Blog"
 import { Request,Response } from "express"
+import Image from "../models/Image";
 
+const uploadImg = require("../cloudinary/cloudinary.js")
 const getAll = async(req:Request,res:Response) => {
     try {
         const blogs = await Blog.find({}).populate("uid","-upassword");
-        console.log(blogs);
         return res.status(200).json(blogs);
     } catch (error) {
-        console.log("Inside");
         return res.status(400).json(error);
     }
 }
@@ -22,6 +22,15 @@ const findBlog = async(req:Request,res:Response) => {
     }
 }
 
+const findImg = async(req:Request,res:Response) => {
+    try {
+        const img:any = await Image.findById(req.params.id);
+        return res.status(200).json(img);
+    } catch (error) {
+        return res.status(400).json(error)
+    }
+}
+
 const featuredBlog = async(req:Request,res:Response) => {
     try {
         const blog = await Blog.find({featured:true}).populate("uid","-upassword").limit(3);
@@ -30,6 +39,7 @@ const featuredBlog = async(req:Request,res:Response) => {
         res.status(400).json(error);
     }
 }
+
 
 const updateBlogViews = async(req:Request,res:Response)=>{
     try {
@@ -42,14 +52,23 @@ const updateBlogViews = async(req:Request,res:Response)=>{
     }
 }
 
+const uploadImage = async(req:any,res:any) => {
+    uploadImg(req.body.image)
+    .then((url:any)=>{res.send({url:url})})
+    .catch((err:any)=>console.log(err))
+}
+
 const createBlog = async(req:any,res:any) => {
     try {
         console.log("Inside Creation");
+        console.log(res.user);
         const btitle = req.body.title;
         const bdesc = req.body.desc;
         const bcat = req.body.category;
         const bphoto = req.body.photo;
+        console.log(bphoto);
         const blog = await Blog.create({btitle:btitle,bdesc:bdesc,bcat:bcat,bphoto:bphoto,uid:res.user.id});
+        console.log(blog);
         return res.status(200).json(blog);
     } catch (error) {
         return res.status(400).json(error); 
@@ -104,4 +123,4 @@ const deleteBlog = async(req:any,res:any)=>{
     }
 }
 
-export {getAll,findBlog,featuredBlog,createBlog,updateBlog,likeBlog,deleteBlog,updateBlogViews};
+export {getAll,findBlog,featuredBlog,createBlog,updateBlog,likeBlog,deleteBlog,updateBlogViews,findImg,uploadImage};

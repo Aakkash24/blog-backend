@@ -1,15 +1,16 @@
-import express, { Application } from "express"
+import express, { Application, json } from "express"
 import mongoose from "mongoose"
 import cors from "cors"
 import { userRouter } from "./Routes/user"
 import { blogRouter } from "./Routes/blog"
+import Image from "./models/Image"
 
-
+var bodyParser = require('body-parser');
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
 const dotenv = require("dotenv").config()
-export const app:Application = express()
 const multer = require("multer")
+export const app:Application = express()
 
 const swaggerOptions = {
     swaggerDefinition:{
@@ -52,6 +53,8 @@ mongoose.connect(URL).then(() => {
 
 app.use("/user", userRouter);
 app.use("/blog", blogRouter);
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 /**
  * @swagger
  * /images/{fileName}:
@@ -72,21 +75,7 @@ app.use("/blog", blogRouter);
  *       404:
  *         description: Image not found
  */
-app.use("/images",express.static('public/images'))
 
-const storage = multer.diskStorage({
-    destination:function(req:any,file:any,cb:any){
-        cb(null,'public/images');
-    },
-    filename:function(req:any,file:any,cb:any){
-        cb(null,req.body.filename);
-    }
-})
-
-const upload = multer({storage:storage});
-app.post('/upload', upload.single("image"), async(req, res) => {
-    return res.status(200).json({msg: "Successfully uploaded"})
-})
 
 // Server 
 app.listen(PORT, () => {

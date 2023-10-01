@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findBlog, getAll, featuredBlog, createBlog, updateBlog,likeBlog,deleteBlog,updateBlogViews } from "../controllers/blog";
+import { findImg,findBlog, getAll, uploadImage,featuredBlog, createBlog, updateBlog,likeBlog,deleteBlog,updateBlogViews } from "../controllers/blog";
 import verify from "../middleware/verify";
 
 const blogRouter:Router = Router();
@@ -73,6 +73,7 @@ blogRouter.get("/getAll",getAll);
  *         description: Internal server error
  */
 blogRouter.get("/find/:id",findBlog);
+blogRouter.get("/findImg/:id",findImg);
 
 
 /**
@@ -187,7 +188,8 @@ blogRouter.get("/updateViews/:id",updateBlogViews);
  *       500:
  *         description: Internal server error
  */
-blogRouter.post("/",createBlog);
+blogRouter.post("/",verify,createBlog);
+blogRouter.post("/uploadImage",uploadImage);
 
 /**
  * @swagger
