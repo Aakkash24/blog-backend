@@ -40,7 +40,7 @@ app.use((req,res,next)=>{
   next();
 })
 
-const URL:any = process.env.URL
+const URL:any = process.env.MONGO_URL
 const PORT:any = process.env.PORT
 
 // DB Connection
